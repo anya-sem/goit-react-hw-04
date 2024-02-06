@@ -1,18 +1,17 @@
-import { useState, useEffect } from 'react';
-import { SearchBar } from './SearchBar/SearchBar'
-import { Toaster } from 'react-hot-toast';
-import { getImages } from './imageAPI';
-import { ImageGallery } from './ImageGallery/ImageGallery';
-import { ErrorMessage } from './ErrorMessage/ErrorMessage';
-import { Loader } from './Loader/Loader';
-import { LoadMoreButton } from './LoadMoreButton/LoadMoreButton';
-// import { ImageModal } from './ImageModal/ImageModal';
-// import Modal from 'react-modal';
-
-
+import { useState, useEffect } from "react";
+import { SearchBar } from "./SearchBar/SearchBar";
+import { Toaster } from "react-hot-toast";
+import { getImages } from "./imageAPI";
+import { ImageGallery } from "./ImageGallery/ImageGallery";
+import { ErrorMessage } from "./ErrorMessage/ErrorMessage";
+import { Loader } from "./Loader/Loader";
+import { LoadMoreButton } from "./LoadMoreButton/LoadMoreButton";
+import { ImageModal } from "./ImageModal/ImageModal";
+import Modal from "react-modal";
+Modal.setAppElement("#root");
 
 function App() {
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
   const [page, setPage] = useState(1);
   const [images, setImages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -21,7 +20,6 @@ function App() {
   const [error, setError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
-  
 
   const onHandleSubmit = (value) => {
     setQuery(value);
@@ -32,9 +30,9 @@ function App() {
     setIsVisible(false);
     setIsModalOpen(false);
   };
-  
+
   const onHandleLoadMore = () => {
-    setPage(prevPage => prevPage + 1);
+    setPage((prevPage) => prevPage + 1);
   };
 
   function openModal() {
@@ -44,7 +42,6 @@ function App() {
     setIsModalOpen(false);
   }
 
-
   useEffect(() => {
     if (!query) return;
     setIsLoading(true);
@@ -52,56 +49,61 @@ function App() {
     const searchImages = async () => {
       try {
         const { results, total_results, per_page } = await getImages(
-          query, page,
+          query,
+          page
         );
         if (results.length === 0) {
           setIsEmpty(true);
           return;
         }
-        setImages(prevImages => [...prevImages, ...results]);
+        setImages((prevImages) => [...prevImages, ...results]);
         setIsVisible(page < Math.ceil(total_results / per_page));
-
       } catch (error) {
         setError(true);
-
       } finally {
         setIsLoading(false);
-      };
+      }
     };
 
     searchImages();
   }, [query, page]);
 
   const customStyles = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
-  },
+    content: {
+      top: "50%",
+      left: "50%",
+      right: "auto",
+      bottom: "auto",
+      marginRight: "-50%",
+      transform: "translate(-50%, -50%)",
+    },
   };
 
   const updateSelectedImage = (image) => {
-   setSelectedImage(image);
-   openModal();
-};
+    setSelectedImage(image);
+    openModal();
+  };
 
   return (
     <>
       <SearchBar onSubmit={onHandleSubmit} />
       <Toaster />
-      {images.length > 0 && <ImageGallery
-        images={images}
-        isModalOpen={isModalOpen}
-        closeModal={closeModal}
-        selectedImage={updateSelectedImage} />}
+      {images.length > 0 && (
+        <ImageGallery images={images} selectedImage={updateSelectedImage} />
+      )}
       <ErrorMessage error={error} isEmpty={isEmpty} />
       {isLoading && <Loader />}
       {images.length > 0 && <LoadMoreButton onClick={onHandleLoadMore} />}
+      {selectedImage && (
+        <ImageModal
+          isOpen={isModalOpen}
+          onRequestClose={closeModal}
+          image={selectedImage}
+          style={customStyles}
+        />
+      )}
     </>
-  )
+  );
 }
 
-export default App
+export default App;

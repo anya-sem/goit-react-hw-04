@@ -1,16 +1,19 @@
-import Modal from 'react-modal';
+import Modal from "react-modal";
 
-export const ImageModal = ({ isOpen, onRequestClose, image }) => {
-   return (
-      <Modal
-         isOpen={isOpen}
-         onRequestClose={onRequestClose}
-      >
-         {image && (
-            <div>
-               <img src={image.small} alt={image.alt_description} />
-            </div>
-         )}
-      </Modal>
-   );
+export const ImageModal = ({
+  isOpen,
+  onRequestClose,
+  selectedImage,
+  style,
+}) => {
+  return (
+    <Modal isOpen={isOpen} onRequestClose={onRequestClose} style={style}>
+      {selectedImage && (
+        <img
+          src={selectedImage.urls.regular}
+          alt={selectedImage.alt_description}
+        />
+      )}
+    </Modal>
+  );
 };
