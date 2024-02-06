@@ -6,6 +6,9 @@ import { ImageGallery } from './ImageGallery/ImageGallery';
 import { ErrorMessage } from './ErrorMessage/ErrorMessage';
 import { Loader } from './Loader/Loader';
 import { LoadMoreButton } from './LoadMoreButton/LoadMoreButton';
+// import { ImageModal } from './ImageModal/ImageModal';
+// import Modal from 'react-modal';
+
 
 
 function App() {
@@ -16,17 +19,31 @@ function App() {
   const [isEmpty, setIsEmpty] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [error, setError] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
+  
 
   const onHandleSubmit = (value) => {
     setQuery(value);
-    setImages([]);
     setPage(1);
+    setImages([]);
     setIsEmpty(false);
     setError(false);
     setIsVisible(false);
+    setIsModalOpen(false);
   };
   
- 
+  const onHandleLoadMore = () => {
+    setPage(prevPage => prevPage + 1);
+  };
+
+  function openModal() {
+    setIsModalOpen(true);
+  }
+  function closeModal() {
+    setIsModalOpen(false);
+  }
+
 
   useEffect(() => {
     if (!query) return;
@@ -34,17 +51,18 @@ function App() {
 
     const searchImages = async () => {
       try {
-        const { images } = await getImages(
+        const { results, total_results, per_page } = await getImages(
           query, page,
         );
-        if (images.length === 0) {
+        if (results.length === 0) {
           setIsEmpty(true);
           return;
         }
-        setImages(prevImages => [...prevImages, ...images]);
+        setImages(prevImages => [...prevImages, ...results]);
+        setIsVisible(page < Math.ceil(total_results / per_page));
 
       } catch (error) {
-        setError(error);
+        setError(true);
 
       } finally {
         setIsLoading(false);
@@ -52,17 +70,36 @@ function App() {
     };
 
     searchImages();
-  }, [query,page]);
+  }, [query, page]);
 
-  
+  const customStyles = {
+  content: {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)',
+  },
+  };
+
+  const updateSelectedImage = (image) => {
+   setSelectedImage(image);
+   openModal();
+};
+
   return (
     <>
       <SearchBar onSubmit={onHandleSubmit} />
       <Toaster />
-      {images.length > 0 && <ImageGallery images={images} />}
+      {images.length > 0 && <ImageGallery
+        images={images}
+        isModalOpen={isModalOpen}
+        closeModal={closeModal}
+        selectedImage={updateSelectedImage} />}
       <ErrorMessage error={error} isEmpty={isEmpty} />
       {isLoading && <Loader />}
-
+      {images.length > 0 && <LoadMoreButton onClick={onHandleLoadMore} />}
     </>
   )
 }

@@ -1,7 +1,7 @@
-export const LoadMoreButton = ({ onClick, isLoading }) => {
+export const LoadMoreButton = ({ onClick }) => {
   return (
     <button type="button" onClick={onClick}>
-       {isLoading ? 'Loading' : 'Load more'}
+      Load more
     </button>
   );
 };

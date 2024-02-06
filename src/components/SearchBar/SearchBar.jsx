@@ -13,6 +13,7 @@ export const SearchBar = ({onSubmit}) => {
       e.preventDefault();
       if (!query.trim()) {
         toast.error('Please, enter your request');
+        return;
     }
       onSubmit(query);
       setQuery('');
