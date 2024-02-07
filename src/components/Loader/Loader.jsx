@@ -1,16 +1,23 @@
 import { LineWave } from "react-loader-spinner";
 
 export const Loader = () => {
-  return <LineWave
-  visible={true}
-  height="100"
-  width="100"
-  color="#4fa94d"
-  ariaLabel="line-wave-loading"
-  wrapperStyle={{}}
-  wrapperClass=""
-  firstLineColor=""
-  middleLineColor=""
-  lastLineColor=""
-  />;
+  const style = {
+    position: "fixed",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+  };
+  return (
+    <div style={style}>
+      <LineWave
+        visible={true}
+        height="100"
+        width="100"
+        color="#dbaded"
+        ariaLabel="line-wave-loading"
+        wrapperStyle={{}}
+        wrapperClass=""
+      />
+    </div>
+  );
 };

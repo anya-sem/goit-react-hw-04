@@ -1,8 +1,9 @@
 import { ImageCard } from "../ImageCard/ImageCard";
+import css from "./ImageGallery.module.css";
 
 export const ImageGallery = ({ images, selectedImage }) => {
   return (
-    <ul>
+    <ul className={css.gallery}>
       {images.map(({ id, urls, alt_description }) => (
         <li key={id}>
           <ImageCard

@@ -1,7 +1,9 @@
+import css from "./ImageCard.module.css";
+
 export const ImageCard = ({ src, alt, selectedImage }) => {
   return (
-    <div onClick={selectedImage}>
-      <img src={src} alt={alt} />
+    <div className={css.card} onClick={selectedImage}>
+      <img className={css.image} src={src} alt={alt} />
     </div>
   );
 };

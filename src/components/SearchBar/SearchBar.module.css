@@ -1,0 +1,36 @@
+header {
+  background-color: #7ea3de;
+  width: 100%;
+  margin-bottom: 15px;
+}
+form {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  gap: 15px;
+  padding: 10px;
+}
+input {
+  border-radius: 5px;
+  border: 1.5px solid transparent;
+  padding: 8px;
+  width: 200px;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+input:hover {
+  border-color: #adc6ed;
+}
+.button {
+  border-radius: 5px;
+  border: 1px solid transparent;
+  padding: 8px;
+  width: 60px;
+  background-color: #adc6ed;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.25s;
+}
+.button:hover {
+  background-color: #dbaded;
+}

@@ -98,7 +98,7 @@ function App() {
         <ImageModal
           isOpen={isModalOpen}
           onRequestClose={closeModal}
-          image={selectedImage}
+          selectedImage={selectedImage}
           style={customStyles}
         />
       )}

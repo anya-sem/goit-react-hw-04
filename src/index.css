@@ -6,10 +6,6 @@
 
 body {
   margin: 0 auto;
-  padding-top: 100px;
-  display: flex;
-  justify-content: center;
-  text-align: center;
   line-height: 1.5;
 }
 h1,
