@@ -48,16 +48,14 @@ function App() {
 
     const searchImages = async () => {
       try {
-        const { results, total_results, per_page } = await getImages(
-          query,
-          page
-        );
+        const { results, total_results, per_page, total_pages } =
+          await getImages(query, page);
         if (results.length === 0) {
           setIsEmpty(true);
           return;
         }
         setImages((prevImages) => [...prevImages, ...results]);
-        setIsVisible(page < Math.ceil(total_results / per_page));
+        setIsVisible(total_pages && total_pages !== page);
       } catch (error) {
         setError(true);
       } finally {
@@ -93,7 +91,7 @@ function App() {
       )}
       <ErrorMessage error={error} isEmpty={isEmpty} />
       {isLoading && <Loader />}
-      {images.length > 0 && <LoadMoreButton onClick={onHandleLoadMore} />}
+      {isVisible && <LoadMoreButton onClick={onHandleLoadMore} />}
       {selectedImage && (
         <ImageModal
           isOpen={isModalOpen}
